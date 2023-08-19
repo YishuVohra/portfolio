@@ -6,29 +6,64 @@ const scroll = new LocomotiveScroll({
   smooth: true,
 });
 
-function firstPageAnimation() {
-  var t1 = gsap.timeline();
-  t1.from("#nav", {
+function timer() {
+  let percent = 0;
+  setInterval(function () {
+    percent += Math.floor(Math.random() * 20);
+    if (percent < 100) {
+      document.querySelector("#loader h4 span").innerHTML = `${percent}%`;
+    } else {
+      percent = 100;
+      document.querySelector("#loader h4 span").innerHTML = `${percent}%`;
+    }
+  }, 150);
+}
+
+var timelinez = gsap.timeline();
+timelinez.to("#loader h4 span", {
+  delay: 0.5,
+  duration: 1,
+  onStart: timer(),
+});
+timelinez.to("#loader", {
+  top: '-100vh',
+  delay: 0.4,
+  duration: 1.5,
+})
+
+timelinez
+  .from("#nav", {
+    y: "-10",
+    opacity: 0,
+    duration: 1,
+    ease: Expo.easeInOut,
+  })
+  .to(".boundingelem", {
+    y: "0",
+    duration: 1.6,
+    ease: Expo.easeInOut,
+    delay: -1,
+    stagger: 0.2,
+  })
+  .from("#herofooter", {
     y: "-10",
     opacity: 0,
     duration: 1.5,
     ease: Expo.easeInOut,
+    delay: -0.5,
+    stagger: 0.2
   })
-    .to(".boundingelem", {
-      y: "0",
-      duration: 1.6,
-      ease: Expo.easeInOut,
-      delay: -1,
-      stagger: 0.2,
-    })
-    .from("#herofooter", {
-      y: "-10",
-      opacity: 0,
-      duration: 1.5,
-      ease: Expo.easeInOut,
-      delay: -0.5,
-    });
-}
+  .from("#scroll-down", {
+    y: -20,
+    repeat: -1,
+    duration: 1,
+    yoyo: true,
+  });
+
+// function firstPageAnimation() {
+//   var t1 = gsap.timeline();
+
+// }
 function cicleMouseFollower(xscale, yscale) {
   window.addEventListener("mousemove", function (details) {
     document.querySelector(
@@ -78,7 +113,6 @@ document.querySelectorAll(".elem").forEach(function (elem) {
     diffrot = details.clientX - rotate;
     rotate = details.clientX;
 
-    
     gsap.to(elem.querySelector("img"), {
       display: "block",
       ease: Power3,
@@ -116,9 +150,8 @@ function showMenu() {
   var t1 = gsap.timeline();
   t1.fromTo(
     "#mynav",
-    { opacity: 0, display: "block", },
-    { duration: 0.2, opacity: 1 , ease: Expo.easeInOut,},
-    
+    { opacity: 0, display: "block" },
+    { duration: 0.2, opacity: 1, ease: Expo.easeInOut }
   );
 
   t1.to("#menu", {
@@ -165,7 +198,5 @@ document.getElementById("mynav").addEventListener("mouseleave", function () {
   // If the "mynav" is no longer hovered, set a new timeout to hide it
   hideTimeout = setTimeout(hideMenu, 5000);
 });
-
-firstPageAnimation();
 cicleMouseFollower();
 circleSkew();
